@@ -1,4 +1,3 @@
-
 # JetBrains related
 .idea/
 advent-of-code-2021.iml
@@ -9,11 +8,12 @@ advent-of-code-2021.iml
 
 # Private user files
 private/
-cookies/
+cookies
 
 # Mac files
 .DS_Store
 /out/
 
-# Python bytecode
+# Python
 __pycache__/
+venv/
