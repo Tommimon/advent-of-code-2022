@@ -1,0 +1,19 @@
+
+# JetBrains related
+.idea/
+advent-of-code-2021.iml
+
+# VS Code related
+.vscode/
+.vs/
+
+# Private user files
+private/
+cookies/
+
+# Mac files
+.DS_Store
+/out/
+
+# Python bytecode
+__pycache__/
