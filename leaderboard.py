@@ -6,10 +6,10 @@ except ModuleNotFoundError:
     print("Can't find requests module, stopping update")
     exit(0)
 
-URL = 'https://adventofcode.com/2021/leaderboard/private/view/976110.json'
+URL = 'https://adventofcode.com/2022/leaderboard/private/view/976110.json'
 COOKIE_FILE = 'cookies'
 README_FILE = 'README.md'
-DELTA_TIME = 10
+DELTA_TIME = 900
 MARKER_BEGIN = '<!---LEADERBOARD_GRID_BEGIN:'
 MARKER_END = 'LEADERBOARD_GRID_END--->'
 
