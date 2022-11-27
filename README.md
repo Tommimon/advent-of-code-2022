@@ -29,3 +29,15 @@ Our solutions to Advent of Code problems
                                 \_____/
 ```
 
+## Solved problems
+
+### Edit table
+To enable leaderboard automatic update on every commit run `setup.py` and
+follow the script instructions.
+
+### Table
+- Blank spaces are unsolved problems
+- `*` if you solved the first part
+- `**` if you also solved the second part
+
+<!---LEADERBOARD_GRID(1669575215)--->
