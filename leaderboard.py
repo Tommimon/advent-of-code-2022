@@ -6,7 +6,8 @@ except ModuleNotFoundError:
     print("Can't find requests module, stopping update")
     exit(0)
 
-URL = 'https://adventofcode.com/2022/leaderboard/private/view/976110.json'
+YEAR = '2022'
+URL = 'https://adventofcode.com/' + YEAR + '/leaderboard/private/view/976110.json'
 COOKIE_FILE = 'cookies'
 README_FILE = 'README.md'
 DELTA_TIME = 900
@@ -97,37 +98,42 @@ def stars(member, day):
 
 def write_grid(data, user_map):
     users = list(map(lambda e: e[0], user_map))
-    members = list(filter(lambda m: m["name"] in users, data["members"].values()))
+    members = list(filter(lambda e: e["name"] in users, data["members"].values()))
+    members.sort(key=lambda e: e["local_score"], reverse=True)
     text = '| |'
-    for v in members:
-        name = v["name"]
+    for m in members:
+        name = m["name"]
         text += ' <a href="https://github.com/{}"><img src="{}" width="40" height="40"/>' \
                 '</a> |'.format(github_username(name, user_map), image_link(name, user_map))
 
     text += '\n| :---: |'
-    for v in members:
+    for _m in members:
         text += ' :---: |'
 
     text += '\n| **Day** |'
-    for v in members:
-        name = v["name"]
+    for m in members:
+        name = m["name"]
         text += ' <a href="https://github.com/{}"><sup><sub>{}</sub></sup>' \
                 '</a> |'.format(github_username(name, user_map), folder_name(name, user_map))
 
     for i in range(25):
         text += '\n| [{}][d{}] |'.format(i+1, i+1)
-        for j, v in enumerate(members):
-            text += ' [{}][d{}u{}] |'.format(stars(v, i+1), i+1, j)
+        for j, m in enumerate(members):
+            text += ' [{}][d{}u{}] |'.format(stars(m, i+1), i+1, j)
+
+    text += '\n| **Points** |'
+    for m in members:
+        text += ' {} |'.format(m["local_score"])
 
     text += '\n\n'
     for i in range(25):
-        text += '\n[d{}]: https://adventofcode.com/2022/day/{}'.format(i+1, i+1)
+        text += '\n[d{}]: https://adventofcode.com/{}/day/{}'.format(i+1, YEAR, i+1)
 
     text += '\n\n'
     for i in range(25):
-        for j, v in enumerate(members):
-            text += '\n[d{}u{}]: https://github.com/Tommimon/advent-of-code-2022/' \
-                    'tree/master/{}/{}'.format(i+1, j, folder_name(v["name"], user_map), i+1)
+        for j, m in enumerate(members):
+            text += '\n[d{}u{}]: https://github.com/Tommimon/advent-of-code-{}/' \
+                    'tree/master/{}/{}'.format(i+1, j, YEAR, folder_name(m["name"], user_map), i+1)
     return text
 
 
