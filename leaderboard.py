@@ -133,7 +133,7 @@ def write_grid(data, user_map):
     for i in range(25):
         for j, m in enumerate(members):
             text += '\n[d{}u{}]: https://github.com/Tommimon/advent-of-code-{}/' \
-                    'tree/master/{}/{}'.format(i+1, j, YEAR, folder_name(m["name"], user_map), i+1)
+                    'tree/main/{}/{}'.format(i+1, j, YEAR, folder_name(m["name"], user_map), "d" + str(i+1).zfill(2))
     return text
 
 
