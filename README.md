@@ -57,7 +57,7 @@ LEADERBOARD_GRID_END--->
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Day** | <a href="https://github.com/riccardoinghilleri"><sup><sub>riccardoinghilleri</sub></sup></a> | <a href="https://github.com/IronBlack"><sup><sub>MatteoBlack</sub></sup></a> | <a href="https://github.com/Tommimon"><sup><sub>Tommimon</sub></sup></a> | <a href="https://github.com/Gonduls"><sup><sub>Gonduls</sub></sup></a> | <a href="https://github.com/marcoparadina"><sup><sub>marcoparadina</sub></sup></a> | <a href="https://github.com/marcomole00"><sup><sub>marcomole00</sub></sup></a> | <a href="https://github.com/zoythum"><sup><sub>zoythum</sub></sup></a> | <a href="https://github.com/mynam3isg00d"><sup><sub>mynam3isg00d</sub></sup></a> | <a href="https://github.com/Puricelli"><sup><sub>Puricelli</sub></sup></a> | <a href="https://github.com/riccardo-negri"><sup><sub>riccardo-negri</sub></sup></a> |
 | [1][d1] | [**][d1u0] | [**][d1u1] | [**][d1u2] | [**][d1u3] | [**][d1u4] | [**][d1u5] | [**][d1u6] | [**][d1u7] | [**][d1u8] | [**][d1u9] |
-| [2][d2] | [**][d2u0] | [**][d2u1] | [**][d2u2] | [**][d2u3] | [ ][d2u4] | [ ][d2u5] | [ ][d2u6] | [ ][d2u7] | [ ][d2u8] | [ ][d2u9] |
+| [2][d2] | [**][d2u0] | [**][d2u1] | [**][d2u2] | [**][d2u3] | [**][d2u4] | [ ][d2u5] | [ ][d2u6] | [ ][d2u7] | [ ][d2u8] | [ ][d2u9] |
 | [3][d3] | [ ][d3u0] | [ ][d3u1] | [ ][d3u2] | [ ][d3u3] | [ ][d3u4] | [ ][d3u5] | [ ][d3u6] | [ ][d3u7] | [ ][d3u8] | [ ][d3u9] |
 | [4][d4] | [ ][d4u0] | [ ][d4u1] | [ ][d4u2] | [ ][d4u3] | [ ][d4u4] | [ ][d4u5] | [ ][d4u6] | [ ][d4u7] | [ ][d4u8] | [ ][d4u9] |
 | [5][d5] | [ ][d5u0] | [ ][d5u1] | [ ][d5u2] | [ ][d5u3] | [ ][d5u4] | [ ][d5u5] | [ ][d5u6] | [ ][d5u7] | [ ][d5u8] | [ ][d5u9] |
