@@ -21,11 +21,11 @@ int main() {
     int largest = max<int>(pack_values, [](const int e) {return e;});
     int tot = largest;
     std::cout << largest << std::endl;
-    remove_elem<int>(pack_values, largest);
+    remove<int>(pack_values, largest);
 
     largest = max<int>(pack_values, [](const int e) {return e;});
     tot += largest;
-    remove_elem<int>(pack_values, largest);
+    remove<int>(pack_values, largest);
 
     largest = max<int>(pack_values, [](const int e) {return e;});
     tot += largest;
