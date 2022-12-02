@@ -31,7 +31,7 @@ T max (std::vector<T> const &vec, std::function<int(T)> const &key)
 }
 
 template<typename T>
-void remove_elem(std::vector<T> &vec, T const &elem) {
+void remove(std::vector<T> &vec, T const &elem) {
     std::remove_if(vec.begin(), vec.end(), [&](const auto &item) {
         return elem == item;
     });
