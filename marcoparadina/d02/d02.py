@@ -4,14 +4,9 @@ def part1(filename):
 	dist = ord('X') - ord('A')
 	with open(filename) as f:
 		for l in f :
-			#l.strip()
-			#print(l[0])
-			#print(l[2])
 			if ord(l[0])==(ord(l[2]) - dist): 
 				#draw
-				
 				score += ((ord(l[0]) - ascii + 1) + 3)
-				#print(l[0], l[2], "score = ", ((ord(l[0]) - ascii + 1) + 3))
 			if l[0]=='A' and l[2] == 'Y': 
 				score += 2+6
 			if l[0]=='A' and l[2] == 'Z': 
