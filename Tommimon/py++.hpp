@@ -1,6 +1,8 @@
 #ifndef ADVENT_OF_CODE_2022_PY_HPP
 #define ADVENT_OF_CODE_2022_PY_HPP
 
+#include <functional>
+
 std::vector<std::string> split(std::string const &str, std::string const &delim);
 int sum (std::vector<int> const &vec);
 
