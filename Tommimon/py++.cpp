@@ -22,6 +22,21 @@ std::vector<std::string> split(std::string const &str, std::string const &delim)
     return out;
 }
 
+std::string replace(std::string const &str, std::string const &charsIn, std::string const &charsOut) {
+    std::string out(str);
+    size_t pos = 0;
+    while (pos != std::string::npos)
+    {
+        pos = out.find(charsIn, pos);
+        if (pos != std::string::npos) {
+            out.erase(pos, charsIn.length());
+            out.insert(pos, charsOut);
+            pos += charsOut.length();
+        }
+    }
+    return out;
+}
+
 int sum (std::vector<int> const &vec) {
     int tot = 0;
     for (auto e: vec)

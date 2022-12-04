@@ -4,6 +4,7 @@
 #include <functional>
 
 std::vector<std::string> split(std::string const &str, std::string const &delim);
+std::string replace(std::string const &str, std::string const &charsIn, std::string const &charsOut);
 int sum (std::vector<int> const &vec);
 
 template<typename T1, typename T2>
