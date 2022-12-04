@@ -29,11 +29,7 @@ int main(){
         //part 2
         if(numbers[0] <= numbers[2] && numbers[2] <= numbers[1])
             result2 ++;
-        else if(numbers[0] <= numbers[3] && numbers[3] <= numbers[1])
-            result2 ++;
         else if(numbers[2] <= numbers[0] && numbers[0] <= numbers[3])
-            result2 ++;
-        else if(numbers[2] <= numbers[1] && numbers[1] <= numbers[3])
             result2 ++;
     }
     cout << "Result part1 = " << result1 << endl;
