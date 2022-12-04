@@ -33,7 +33,25 @@ for l in f:
             total[key] +=1
 
 
-print (total)
+
+
+
+for key in total.keys():
+    sum_of_total += points[key]*total[key]
+
+
+print(sum_of_total)
+
+
+### part1 with sets
+total.clear()
+sum_of_total =0
+
+for l in f:
+    a,b = l[:len(l)//2], l[len(l)//2:]
+    item = (set(a) & set(b)).pop()
+    if item not in total.keys(): total[item] =0
+    total[item] += 1
 
 
 for key in total.keys():
