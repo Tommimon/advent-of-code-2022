@@ -11,12 +11,9 @@ std::vector<std::string> split(std::string const &str, std::string const &delim)
         cut = remaining.find(delim);
         if (cut == std::string::npos)
             out.push_back(remaining.substr(0, remaining.size()));
-        else if (cut == 0) {
-            remaining = remaining.substr(delim.size(), remaining.size());
-        }
         else {
             out.push_back(remaining.substr(0, cut));
-            remaining = remaining.substr(cut, remaining.size());
+            remaining = remaining.substr(cut + delim.size(), remaining.size());
         }
     }
     return out;
