@@ -23,6 +23,7 @@ for p in piles:
     sol1 += p[0]
 
 print(sol1)
+print(*[*zip(*piles)][0]) 
 
 ### part2
 
