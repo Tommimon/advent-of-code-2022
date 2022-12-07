@@ -9,5 +9,6 @@ add_executable(day03 d03/part1and2.cpp py++.cpp)
 add_executable(day04 d04/part1and2.cpp py++.cpp)
 add_executable(day05 d05/part1and2.cpp py++.cpp)
 add_executable(day06 d06/part1and2.cpp py++.cpp)
+add_executable(day07 d07/part1and2.cpp py++.cpp)
 
 include_directories(.)
