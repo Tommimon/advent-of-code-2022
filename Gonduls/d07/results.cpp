@@ -6,7 +6,9 @@
 #define INPUT "./Gonduls/d07/input.txt"
 using namespace std;
 
-int globalResult = 0;
+int result1 = 0;
+int result2;
+int threshold = 0;
 
 class Dir{
     list<Dir> subDirs;
@@ -31,13 +33,6 @@ class Dir{
         void addDir(string name){
             added = true;
             subDirs.push_back(Dir(name, this));
-            /* cout << "{";
-
-            for(Dir d : subDirs)
-                cout << ", " << d.name;
-            
-            cout << "}\n"; */
-
         }
 
         Dir * getDir(string name){
@@ -74,10 +69,12 @@ int traverse(Dir * root){
     for (Dir d : root -> getSubDirs())
         result += traverse(&d);
 
-    //cout << root -> name << ", " << result << endl;
-    
     if(result < 100000)
-        globalResult += result;
+        result1 += result;
+    
+    if(result > threshold && result  < result2)
+        result2 = result;
+    
     return result;
 }
 
@@ -92,12 +89,10 @@ int main(){
     // populate
     while(getline(file, line)){
         if(line.find("$ cd ", 0) == 0){
-            //cout << line << endl;
             string end = line.substr(5);
             
             if(end.compare("..") == 0){
                 current = current -> getFather();
-                //cout << "\t> " << current -> name << endl;
                 continue;
             }
             current = current -> getDir(end);
@@ -105,30 +100,29 @@ int main(){
         }
         
         if(line.find("$ ls", 0) == 0){
-            //cout << line << endl;
             alreadyAdded = current -> alreadyAdded();
             continue;
         }
 
         if(alreadyAdded){
-            //cout << line << endl;
             continue;
         }
         
         if(line.find("dir ", 0) == 0){
-            //cout << line << endl;
             current -> addDir(line.substr(4));
         } else {
             stringstream ss;
             string integer;
             ss << line;
             ss >> integer;
-            // cout << integer << endl;
-            // cout << stoi(integer) << endl;
             current -> addFile(stoi(integer));
         }
     }
     
+    int total = traverse(&root);
+    cout << "Result part 1= " << result1 << endl;
+    threshold = 30000000 - (70000000 - total);
+    result2 = total;
     traverse(&root);
-    cout << globalResult << endl;
+    cout << "Result part 2= " << result2 << endl;
 }
