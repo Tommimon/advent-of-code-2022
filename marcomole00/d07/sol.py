@@ -38,10 +38,9 @@ print(f"part1 is {p1}")
 total = 70000000
 update_size= 30000000
 
-print(total - int(directories["//"]))
 dir_size = total
 for val in directories.values():
     if  total -int(directories["//"]) + val >= update_size: dir_size= min(dir_size,val)
 
 
-print(dir_size)
+print(f"part2 is {dir_size}")
