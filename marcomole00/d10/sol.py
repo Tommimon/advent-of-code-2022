@@ -10,7 +10,7 @@ p1 =0
 while True:
     print(x)
     if cycle in (20,60,100,140,180,220): p1 += cycle*x
-    if cycle == 220: break
+    if cycle == 240: break
     if (cycle % 40) -1 in (x-1,x,x+1): image[cycle // 40][(cycle % 40)-1] =  "#"
     if exec ==[]:   
         match next(input).split():
