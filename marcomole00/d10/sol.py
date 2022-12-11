@@ -21,7 +21,6 @@ while True:
     
     cycle+=1
 
-
 print(p1)
 
 for l in image:
