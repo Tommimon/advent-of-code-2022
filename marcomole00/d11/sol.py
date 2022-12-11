@@ -35,9 +35,8 @@ for round in range(1, 21):
         #print(f'{m["number"]}: {m["items_seen"]}')
         p1.append(m["items_seen"])
 
-print(sorted(p1))
-
-
+p1.sort()
+print(p1[-1]*p1[-2])
 monkeys.clear()
 
 for monkey in input:
@@ -69,7 +68,8 @@ for round in range(1, 10001):
         #print(f'{m["number"]}: {m["items_seen"]}')
         p2.append(m["items_seen"])
 
-print(sorted(p2))
 
+p2.sort()
+print(p2[-1]*p2[-2])
 
 
