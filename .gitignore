@@ -17,3 +17,6 @@ cookies
 # Python
 __pycache__/
 venv/
+
+# C/C++ executable files
+*.exe

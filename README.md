@@ -40,7 +40,7 @@ follow the script instructions.
 - `*` if you solved the first part
 - `**` if you also solved the second part
 
-<!---LEADERBOARD_GRID_BEGIN:1670839909
+<!---LEADERBOARD_GRID_BEGIN:1670852332
 Tommimon,https://avatars.githubusercontent.com/u/37435103?v=4
 Gonduls,https://avatars.githubusercontent.com/u/74541475?v=4
 Marco Molè,https://avatars.githubusercontent.com/u/57618578?v=4,marcomole00
