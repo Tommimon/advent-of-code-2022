@@ -38,7 +38,6 @@ def execute2(input: list) -> int:
 
 with open('input.txt') as f:
     lines = f.readlines()
-    cleanLines = []
     treeMap = []
     for line in lines:
         treeMap.append([*line.strip()])
