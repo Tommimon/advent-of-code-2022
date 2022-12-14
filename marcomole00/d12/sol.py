@@ -7,7 +7,7 @@ BFS_info = {(i,j): False for i in range(0,len(file[0])) for j in range(0,len(fil
 
 
 start_point = (0,20)
-end_point = (36,20)
+end_point = (36,20) 
 
 
 input[start_point] = 'a'
