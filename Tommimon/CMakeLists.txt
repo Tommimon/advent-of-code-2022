@@ -21,5 +21,6 @@ add_executable(day13 d13/part1and2.cpp py++.cpp)
 add_executable(day14 d14/part1and2.cpp py++.cpp)
 add_executable(day15p1 d15/part1.cpp py++.cpp)
 add_executable(day15p2 d15/part2.cpp py++.cpp)
+add_executable(day16 d16/part1and2.cpp py++.cpp)
 
 include_directories(.)
