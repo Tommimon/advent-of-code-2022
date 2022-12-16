@@ -4,6 +4,7 @@
 #include "py++.hpp"
 
 using namespace std;
+using namespace py;
 
 int main() {
     ifstream ifs("input");
