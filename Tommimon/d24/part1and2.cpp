@@ -14,7 +14,7 @@ int calcTime(vector<vector<vector<int>>>& blizzards, pair<int, int> entrance, pa
     vector<vector<bool>> reachable(sizeY, vector<bool>(sizeX));
     int steps = 0;
     bool destination = false;
-    while (!destination) {
+    while (true) {
         vector<vector<vector<int>>> tempB(sizeY, vector<vector<int>>(sizeX, vector<int>(0)));
         for (int i = 0; i < sizeY; ++i)
             for (int j = 0; j < sizeX; ++j)
@@ -41,8 +41,10 @@ int calcTime(vector<vector<vector<int>>>& blizzards, pair<int, int> entrance, pa
                             tempR[y][x] = true;
                     }
         reachable = tempR;
-        destination = reachable[escape.first][escape.second];
         steps++;
+        if (destination)  // placed here to take do an additional blizzard cycle
+            break;
+        destination = reachable[escape.first][escape.second];
     }
 
     return steps;
@@ -62,7 +64,7 @@ int main() {
             if (lines[i+1][j+1] != '.')
                 blizzards[i][j].push_back((int) dirMap.find(lines[i + 1][j + 1]));
 
-    int steps = calcTime(blizzards, {0, 0}, {sizeY-1, sizeX-1}) + 1;
+    int steps = calcTime(blizzards, {0, 0}, {sizeY-1, sizeX-1});
     cout << steps << endl;
     steps += calcTime(blizzards, {sizeY-1, sizeX-1}, {0, 0});
     steps += calcTime(blizzards, {0, 0}, {sizeY-1, sizeX-1});
