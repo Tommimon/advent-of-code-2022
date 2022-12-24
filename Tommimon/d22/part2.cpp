@@ -7,7 +7,7 @@
 using namespace std;
 using namespace py;
 
-int fSize;
+int fSize = INT32_MAX;
 
 vector<int> jump(const vector<pair<string, int>>& board, const vector<vector<int>>& division, const vector<vector<pair<int, int>>>& contacts, int i, int j, int dir) {
     int startFace = division[i / fSize][j / fSize];
@@ -51,6 +51,30 @@ vector<int> jump(const vector<pair<string, int>>& board, const vector<vector<int
     return {globalI, globalJ, destinationDir};
 }
 
+void rotateFace(const vector<vector<int>>& division, vector<vector<pair<int, int>>>& contacts, int f, int tar, int finalDir) {
+    int currDir;
+    for (int i = 0; i < contacts[f].size(); i++) {
+        if (contacts[f][i].first == tar)
+            currDir = i;
+    }
+
+    while (currDir != finalDir) {
+        currDir = (currDir+1)%4;
+        pair<int, int> t = contacts[f][3];
+        contacts[f][3] = contacts[f][2];
+        contacts[f][2] = contacts[f][1];
+        contacts[f][1] = contacts[f][0];
+        contacts[f][0] = t;
+        for (int i = 0; i < contacts.size(); ++i) {
+            for (int j = 0; j < contacts[i].size(); ++j) {
+                if (contacts[i][j].first == f)
+                    contacts[i][j].second = (contacts[i][j].second+1) % 4;
+            }
+        }
+    }
+    return;
+}
+
 int main() {
     ifstream ifs("input");
     string input((istreambuf_iterator<char>(ifs)), (istreambuf_iterator<char>()));
@@ -59,35 +83,14 @@ int main() {
     string directions = split(input, "\n\n")[1];
     vector<string> lines(split(mapInput, "\n"));
 
-    vector<vector<pair<int, int>>> contactsTest = {
-            {{5, 2}, {3, 1}, {2, 1}, {1, 1}}, // first number is the target face and the second the arrival direction
-            {{2, 0}, {4, 3}, {5, 3}, {0, 1}},
-            {{3, 0}, {4, 0}, {1, 2}, {0, 0}},
-            {{5, 1}, {4, 1}, {2, 2}, {0, 3}},
-            {{5, 0}, {1, 3}, {2, 3}, {3, 3}},
-            {{0, 2}, {1, 0}, {4, 2}, {3, 2}}
+    vector<vector<pair<int, int>>> contacts { // contacts for the standard cross unfolded cube
+            {{3, 1}, {2, 1}, {1, 1}, {5, 3}},
+            {{2, 0}, {4, 0}, {5, 0}, {0, 0}},
+            {{3, 0}, {4, 1}, {1, 2}, {0, 3}},
+            {{5, 2}, {4, 2}, {2, 2}, {0, 2}},
+            {{3, 3}, {5, 1}, {1, 3}, {2, 3}},
+            {{3, 2}, {0, 1}, {1, 0}, {4, 3}}
     };
-    vector<vector<int>> divisionTest = {
-            {-1, -1, 0, -1},
-            {1, 2, 3, -1},
-            {-1, -1, 4, 5}
-    };
-    vector<vector<pair<int, int>>> contactsInput{
-            {{1, 0}, {2, 1}, {3, 0}, {5, 0}},
-            {{4, 2}, {2, 2}, {0, 2}, {5, 3}},
-            {{1, 3}, {4, 1}, {3, 1}, {0, 3}},
-            {{4, 0}, {5, 1}, {0, 0}, {2, 0}},
-            {{1, 2}, {5, 2}, {3, 2}, {2, 3}},
-            {{4, 3}, {1, 1}, {0, 1}, {3, 3}}
-    };
-    vector<vector<int>> divisionInput = {
-            {-1, 0, 1},
-            {-1, 2, -1},
-            {3, 4, -1},
-            {5, -1, -1}
-    };
-    //vector<vector<pair<int, int>>>& contacts = contactsTest; vector<vector<int>>& division = divisionTest; fSize = 4;
-    vector<vector<pair<int, int>>>& contacts = contactsInput; vector<vector<int>>& division = divisionInput; fSize = 50;
 
     vector<pair<string, int>> board = py::map<string, pair<string, int>>([](const string& s){
         int spaces = 0;
@@ -98,6 +101,78 @@ int main() {
         }
         return make_pair(s.substr(spaces, s.size()-spaces), spaces);
     }, lines);
+
+    int width = 0;
+    for (const auto& r: board) {
+        if (r.first.size() < fSize)
+            fSize = r.first.size();
+        if (r.first.size() + r.second > width)
+            width = r.first.size() + r.second;
+    }
+
+    vector<vector<int>> division;
+    int faceCounter = 0;
+    for (int i = 0; i < board.size() / fSize; ++i) {
+        division.emplace_back();
+        for (int j = 0; j < width / fSize; ++j) {
+            if (j * fSize < board[i*fSize].second || j * fSize >= board[i*fSize].first.size() + board[i*fSize].second)
+                division[i].push_back(-1);
+            else {
+                division[i].push_back(faceCounter);
+                faceCounter++;
+            }
+        }
+    }
+
+    vector<int> faceMapping = {0, -1, -1, -1, -1, -1};
+    bool modified = true;
+    while (modified) {
+        modified = false;
+        for (int k = 0; k < faceMapping.size(); ++k) {
+            int f = faceMapping[k];
+            if (f == -1)
+                continue;
+            for (int i = 0; i < division.size(); ++i) {
+                for (int j = 0; j < division[i].size(); ++j) {
+                    if (division[i][j] == f) {
+                        if (j < division[i].size()-1 && division[i][j+1] != -1)
+                            if (faceMapping[contacts[k][0].first] == -1) {
+                                faceMapping[contacts[k][0].first] = division[i][j + 1];
+                                modified = true;
+                                rotateFace(division, contacts, contacts[k][0].first, k, 2);
+                            }
+                        if (i < division.size()-1 && division[i+1][j] != -1)
+                            if (faceMapping[contacts[k][1].first] == -1) {
+                                faceMapping[contacts[k][1].first] = division[i+1][j];
+                                modified = true;
+                                rotateFace(division, contacts, contacts[k][1].first, k, 3);
+                            }
+                        if (j > 0 && division[i][j-1] != -1)
+                            if (faceMapping[contacts[k][2].first] == -1) {
+                                faceMapping[contacts[k][2].first] = division[i][j-1];
+                                modified = true;
+                                rotateFace(division, contacts, contacts[k][2].first, k, 0);
+                            }
+                        if (i > 0 && division[i-1][j] != -1)
+                            if (faceMapping[contacts[k][3].first] == -1) {
+                                faceMapping[contacts[k][3].first] = division[i-1][j];
+                                modified = true;
+                                rotateFace(division, contacts, contacts[k][3].first, k, 1);
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    for (auto & r : contacts)
+        for (auto & e : r)
+            e.first = faceMapping[e.first];
+
+    vector<vector<pair<int, int>>> temp = contacts;
+    for (int i = 0; i < contacts.size(); ++i)
+        temp[faceMapping[i]] = contacts[i];
+    contacts = temp;
 
     vector<string> instructions = {""};
     for (auto c: directions) {
