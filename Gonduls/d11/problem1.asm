@@ -15,13 +15,19 @@ m6: .word -1:36
 m7: .word -1:36
 
 operations: .byte '*', '+', '*', '^', '+', '+', '+', '+'
+arguments: .word 7, 4, 5, -1, 1, 8, 2, 5
+op_t: .byte '*'
+op_p: .byte '+'
+op_e: .byte '^'
 true: .word 6, 7, 5, 0, 6, 7, 2, 3
 false: .word 4, 5, 1, 4, 2, 3, 1, 0
 last_el: .word 5, 7, 3, 4, 1, 2, 6, 8
+divisible_by: .word 19, 3, 13, 17, 2, 11, 5, 7
 monkeys: .space 32
 inspections: .word 0:8
 
 end_line: .asciiz "\n"
+final_string: .asciiz "Result part 1: "
 
 .text
 
@@ -137,47 +143,185 @@ end_line: .asciiz "\n"
 
 ##### MAIN #####
 
-    # read last element from each array and print it in terminal in a loop
-    la $s0, monkeys
-    la $s1, last_el
+    li $t9, N_ROUNDS
+    ROUND_LOOP:
+        beq $t9, $zero, END_ROUND
+        subi $t9, $t9, 1
 
-    li $t0, 0
-FOR: 
-        beq $t0, N_MONKEYS, END_FOR
-        
-        # t1 = 4 * t0
-        sll $t1, $t0, 2
+        # for each monkey
+        move $t8, $zero
 
-        ### get last_el[t0]
+        # t8 = monkey index
+        # t7 = t8 * 4
+        # s0 = monkeys
+        # s1 = specific monkey address
+        # s6 = operation 
+        # s5 = operation argument
+        MONKEY_LOOP:
+            subi $t0, $t8, N_MONKEYS
+            beq $t0, $zero, END_MONKEY_LOOP
 
-        # t2 = s1 + t1 = address of index of last element of array
-        add $t2, $s1, $t1
-        # t2 = *t2 = index of last element of array + 1
-        lw $t2, 0($t2)
-        # t2 = t2 - 1 = index of last element of array
-        addi $t2, $t2, -1
-        sll $t2, $t2, 2
+            # get monkey address
+            sll $t7, $t8, 2
+            la $s0, monkeys
+            add $t0, $t7, $s0
+            lw $s1, ($t0)
 
-        ### get monkeys[t0][last_el[t0]]
-        add $t3, $s0, $t1
-        lw $t3, 0($t3)
-        add $t3, $t3, $t2
-        lw $t3, 0($t3)
+            # get operation
+            move $s6, $zero
+            la $s6, operations
+            add $t0, $t8, $s6
+            lb $s6, ($t0)
 
-        ### print monkeys[t0][last_el[t0]] in terminal ###
+            # get operation argument
+            la $s5, arguments
+            add $t0, $t7, $s5
+            lw $s5, ($t0)
 
-        li $v0, 1
-        move $a0, $t3
-        syscall
+            # for each worry level
+            la $t0, last_el
+            li $t6, 0
+            add $t5, $t0, $t7
+            lw $t5, ($t5)
 
-        li $v0, 4
-        la $a0, end_line
-        syscall
+            # t5 = last element index
+            # t6 = worry index
+            # t4 = new worry level
+            WORRY_LOOP:
+                beq $t6, $t5, END_WORRY_LOOP
+                
+                # get inspection index
+                la $s2, inspections
+                add $t0, $s2, $t7
+                lw $t1, ($t0)
+                addi $t1, $t1, 1
+                sw $t1, ($t0)
 
-        addi $t0, $t0, 1
-        j FOR
+                # get worry level
+                sll $t0, $t6, 2
+                add $t0, $t0, $s1
+                lw $t1, ($t0)
 
-END_FOR:
+                # index ++
+                addi $t6, $t6, 1
+
+                # if operation is plus jump to case plus
+                lb $t0, op_p
+                beq $s6, $t0, CASE_PLUS
+
+                # if operation is times jump to case times
+                lb $t0, op_t
+                beq $s6, $t0, CASE_TIMES
+
+                CASE_EL:
+                    mul $t4, $t1, $t1
+                    j THROW
+                CASE_PLUS:
+                    add $t4, $t1, $s5
+                    j THROW
+                CASE_TIMES:
+                    mul $t4, $t1, $s5
+                THROW:
+                    addi $t0, $zero, 3
+                    div $t4, $t0
+                    mflo $t4
+            
+                # check whether the new worry level is divisible by divisible_by
+                la $s3, divisible_by
+                add $t0, $t7, $s3
+                lw $t0, ($t0)
+                div $t4, $t0
+                mfhi $t0
+                beq $t0, $zero, DIVISIBLE
+
+                NOT_DIVISIBLE:
+                    la $s4, false
+                    j PUT_IN_NEW_MONKEY
+                DIVISIBLE:
+                    la $s4, true
+                
+                PUT_IN_NEW_MONKEY:
+                    add $t0, $t7, $s4       # t0 = address of index of new monkey
+                    lw $t0, ($t0)           # t0 = index of new monkey
+                    sll $t0, $t0, 2
+
+                    # grab last index of new monkey
+                    la $t1, last_el
+                    add $t1, $t1, $t0
+                    lw $t1, ($t1)
+                    sll $t1, $t1, 2
+
+                    # grab new monkey address
+                    la $t2, monkeys
+                    add $t2, $t2, $t0
+                    lw $t2, ($t2)
+
+                    # store new worry level
+                    add $t3, $t1, $t2
+                    sw $t4, ($t3)
+
+                    # increment last index of new monkey and store it
+                    srl $t1, $t1, 2
+                    addi $t1, $t1, 1
+                    la $t2, last_el
+                    add $t2, $t2, $t0
+                    sw $t1, ($t2)
+
+                    j WORRY_LOOP
+            END_WORRY_LOOP:
+                # set last element to 0
+                la $t0, last_el
+                add $t0, $t0, $t7
+                sw $zero, ($t0)
+
+            addi $t8, $t8, 1
+            j MONKEY_LOOP
+        END_MONKEY_LOOP:
+
+        j ROUND_LOOP
+
+    END_ROUND:
+
+    ## find the two highest inspections and put them in $s0 and $s1
+    la $s2, inspections
+    li $s0, 0
+    li $s1, 0
+
+    # for each inspection
+    li $t9, N_MONKEYS
+
+INSPECTION_LOOP:
+        beq $t9, $zero, END_INSPECTION
+        subi $t9, $t9, 1
+        sll $t8, $t9, 2
+        add $t8, $t8, $s2
+        lw $t8, ($t8)
+
+        # if inspection lower than s1, continue
+        blt $t8, $s1, INSPECTION_LOOP
+        add $s1, $zero, $t8
+
+        # if inspection lower than s0, continue
+        blt $t8, $s0, INSPECTION_LOOP
+        add $s1, $zero, $s0
+        add $s0, $zero, $t8
+
+        j INSPECTION_LOOP
+
+END_INSPECTION:
+
+    # print final string
+    la $a0, final_string
+    li $v0, 4
+    syscall
+
+    # $s0 and $s1 now contain the two highest inspections
+    # multiply them and put the result in $a0
+    mul $a0, $s0, $s1
+
+    # print the result
+    li $v0, 1
+    syscall
 
     li $v0, 10      		# End program
 	syscall
