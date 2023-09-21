@@ -31,7 +31,8 @@ monkeys: .space 32
 inspections: .word 0:8
 
 end_line: .asciiz "\n"
-final_string: .asciiz "Result part 1: "
+final_string: .asciiz "Result part 2: "
+times_st: .asciiz " times "
 
 .text
 
@@ -145,8 +146,6 @@ final_string: .asciiz "Result part 1: "
     sw $s2, 28($s1)
 
 
-
-
 ##### MAIN #####
 
     li $t9, N_ROUNDS
@@ -221,14 +220,14 @@ final_string: .asciiz "Result part 1: "
                 beq $s6, $t0, CASE_TIMES
 
                 CASE_EL:
-                    mult $t1, $t1
                     lw $t0, division
+                    mult $t1, $t1
 
                     # loop to get remainder of division from hi and lo
+                    # t1 = mask of bit to add
+                    # t2 = lo
                     # t3 = index
                     # t4 = remainder
-                    # t1 = bit to add
-                    # t2 = lo
 
                     # first step: get remainder of division from hi
                     mfhi $t4
@@ -250,7 +249,8 @@ final_string: .asciiz "Result part 1: "
                         CASE_1:
                             addi $t4, $t4, 1
                         NEW_REMAINDER:
-                            div $t4, $t2
+                            lw $t0, division
+                            div $t4, $t0
                             mfhi $t4
                         
                         srl $t1, $t1, 1
@@ -351,12 +351,17 @@ INSPECTION_LOOP:
 
 END_INSPECTION:
 
+    # print final string
+    la $a0, final_string
+    li $v0, 4
+    syscall
+
     # print $s0 and $s1
     move $a0, $s0
     li $v0, 1
     syscall
 
-    la $a0, end_line
+    la $a0, times_st
     li $v0, 4
     syscall
 
@@ -366,19 +371,6 @@ END_INSPECTION:
 
     la $a0, end_line
     li $v0, 4
-    syscall
-
-    # print final string
-    la $a0, final_string
-    li $v0, 4
-    syscall
-
-    # $s0 and $s1 now contain the two highest inspections
-    # multiply them and put the result in $a0
-    mul $a0, $s0, $s1
-
-    # print the result
-    li $v0, 1
     syscall
 
     li $v0, 10      		# End program
